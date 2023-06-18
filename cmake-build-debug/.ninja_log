@@ -1,0 +1,4 @@
+# ninja log v5
+10	179	7087017759908086	build.ninja	65a7b9832de00256
+1	227	7086979682423322	CMakeFiles/run.dir/Cards/Witch.cpp.obj	69f6c7b6ae0e47ba
+3	630	7086979686478587	CMakeFiles/run.dir/utilities.cpp.obj	36918b9a94005568
