@@ -29,8 +29,7 @@ public:
 
     //Prints players details: name, level, force, HP and coins.
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
-    //update name for initialization
-    void updateName(std::string name);
+
     //Level up the players level.
     void levelUp();
 

@@ -16,10 +16,9 @@ class Dragon : public BattleCard
 {
     static const int FORCE = 25;
     static const int LOOT = 1000;
-
-    Dragon() : BattleCard(FORCE, LOOT) {}
-
-    virtual void defeatsPlayer(Player &player) const;
+    public:
+        Dragon() : BattleCard(FORCE, LOOT) {}
+        void defeatsPlayer(Player &player) const override;
 };
 
 

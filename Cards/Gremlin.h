@@ -17,10 +17,9 @@ class Gremlin : public BattleCard
     static const int FORCE = 5;
     static const int LOOT = 2;
     static const int HP_TO_DEMINISH = 10;
-
-    Gremlin() : BattleCard(FORCE, LOOT) {}
-
-    void defeatsPlayer(Player &player) const override;
+    public:
+        Gremlin() : BattleCard(FORCE, LOOT) {}
+        void defeatsPlayer(Player &player) const override;
 };
 
 #endif //HW4_GREMLIN_H

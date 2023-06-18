@@ -18,10 +18,9 @@ class Witch : public BattleCard
     static const int FORCE = 11;
     static const int LOOT = 2;
     static const int HP_TO_DEMINISH = 10;
-
-    Witch() : BattleCard(FORCE, LOOT) {}
-
-    virtual void defeatsPlayer(Player &player) const;
+    public:
+        Witch() : BattleCard(FORCE, LOOT) {}
+        void defeatsPlayer(Player &player) const override;
 };
 
 

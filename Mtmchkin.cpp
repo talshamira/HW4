@@ -7,6 +7,10 @@ static const std::string SPACER = " ";
 bool checkName(std::string name);
 bool checkJob(std::string job);
 void getInputs(std::string name, std::string job);
+std::map<std::string ,std::unique_ptr<Card>(*)()> getMapOfCards();
+int getTeamSize();
+
+
 
 Mtmchkin::Mtmchkin(const std::string &filename)
 {
@@ -18,14 +22,14 @@ Mtmchkin::Mtmchkin(const std::string &filename)
     }
     std::string lineRead;
     int counter = 0;
-    std::map<std::string, std::unique_ptr<Cards>(*)()> cardMap = getMapOfCards();
+    std::map<std::string, std::unique_ptr<Card>(*)()> cardMap = getMapOfCards();
     while(std::getline(deckFile, lineRead))
     {
         //TODO check if line numbers start at 0 or 1
         if(cardMap.find(lineRead) != cardMap.end())
         {
             counter++;
-            this->m_deck.push(std::move(cardMap[lineRead]()));
+            this->m_deck.push_front(std::move(cardMap[lineRead]()));
         }
         else
         {
@@ -70,12 +74,82 @@ Mtmchkin::Mtmchkin(const std::string &filename)
         }
         catch(...)
         {
-            throw(std::bad_alloc());
+            throw(std::bad_alloc());// dont know what to throw
         }
+    }
+    this->m_numOfRounds = 0;
+    this->m_winnerPointer = 1;
+    this->m_looserPointer = teamsize;
+}
+
+void Mtmchkin::playRound()
+{
+    if(!isGameOver())
+    {
+        int counter = 0; 
+        this->m_numOfRounds++;
+        printRoundStartMessage(this->m_numOfRounds);
+        for(std::unique_ptr<Player>& player : this->m_players)
+        {
+            if(this->m_rankings[counter] == -1)
+            {
+                printTurnStartMessage(player->getName());
+                this->m_deck.front()->applyEncounter(*player);
+                this->m_deck.push_back(this->m_deck.front());
+                this->m_deck.pop_front();
+                if(player->getLevel() == player->MAX_LEVEL)
+                {
+                    this->m_rankings[counter] = m_winnerPointer++;
+                }
+                else if(player->isKnockedOut())
+                {
+                    this->m_rankings[counter] = m_looserPointer--;
+                }
+            }
+            counter++;
+        }   
+    }
+    if(isGameOver())
+    {
+        printGameEndMessage();
     }
 }
 
-//TODO continue implementation
+bool Mtmchkin::isGameOver() const
+{
+    int teamLength =  this->m_winnerPointer+ this->m_looserPointer;
+    for(int i = 0; i < teamLength; i++)
+    {
+        if(this->m_rankings[i] == -1)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+void Mtmchkin::printLeaderBoard() const
+{
+    printLeaderBoardStartMessage();
+    int teamLength = this->m_looserPointer + this->m_winnerPointer;
+    int searchFor = 1;
+    while(searchFor != teamLength)
+    {
+        int counter = 0;
+        while(counter < teamLength && this->m_rankings[counter] != searchFor)
+        {
+            counter++;
+        }
+        printPlayerLeaderBoard(this->m_rankings[counter], *this->m_players[counter]);
+        searchFor++;
+    }
+}
+ int Mtmchkin::getNumberOfRounds() const
+ {
+    return this->m_numOfRounds;
+ }
+
 void getInputs(std::string name, std::string job)
 {
     printInsertPlayerMessage();
@@ -150,15 +224,15 @@ int getTeamSize()
 }
 
 template <class T>
-std::unique_ptr<Cards> cardTemplateCreate()
+std::unique_ptr<Card> cardTemplateCreate()
 {
-    std::unique_ptr<cards> newCard (new T);
+    std::unique_ptr<Card> newCard(new T);
     return newCard; 
 }
 
-std::map<std::string ,std::unique_ptr<Cards>(*)()> getMapOfCards()
+std::map<std::string ,std::unique_ptr<Card>(*)()> getMapOfCards()
 {
-    std::map<std::string , std::unique_ptr<Cards>(*)()> mapOfCards;
+    std::map<std::string, std::unique_ptr<Card>(*)()> mapOfCards;
     mapOfCards["Gremlin"] = &cardTemplateCreate<Gremlin>;
     mapOfCards["Witch"] = &cardTemplateCreate<Witch>;
     mapOfCards["Dragon"] = &cardTemplateCreate<Dragon>;
