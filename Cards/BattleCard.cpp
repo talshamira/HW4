@@ -3,3 +3,21 @@
 //
 
 #include "BattleCard.h"
+BattleCard::BattleCard(int force, int loot) :
+m_force(force),
+m_loot(loot)
+{}
+
+void BattleCard::applyEncounter(Player &player) const
+{
+    //if player wins:
+    if(player.getAttackStrength() >= this->m_force)
+    {
+        player.levelUp();
+        player.addCoins(this->m_loot);
+    }
+    else
+    {
+        defeatsPlayer(player);
+    }
+}

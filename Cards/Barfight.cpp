@@ -3,3 +3,10 @@
 //
 
 #include "Barfight.h"
+void Barfight::applyEncounter(Player& player) const
+{
+    if(player.getJob() != "Warrior")
+    {
+        player.damage(POINTS_TO_DIMINISH);
+    }
+}

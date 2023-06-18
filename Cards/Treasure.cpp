@@ -3,3 +3,7 @@
 //
 
 #include "Treasure.h"
+void Treasure::applyEncounter(Player& player) const
+{
+    player.addCoins(COINS_TO_ADD);
+}

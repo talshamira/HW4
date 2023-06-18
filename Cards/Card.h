@@ -1,12 +1,12 @@
 //
-// Created by Daniel_Meents on 07/04/2022.
+//
 //
 #ifndef EX2_Card_H
 #define EX2_Card_H
 
 #include <string>
-#include "Player.h"
-#include "utilities.h"
+#include "../Players/Player.h"
+#include "../utilities.h"
 
 /*
  *  CardType:
@@ -16,7 +16,7 @@
  *  HEAL - Increase your player's HP by 'm_heal' points  of CardStats (no more than maxHP points).
  *  TREASURE - Get 'm_profit' coins of CardStats.
 */
-enum class CardType {Battle, Buff, Heal, Treasure}; // The type of the Card
+//enum class CardType {Battle, Buff, Heal, Treasure}; // The type of the Card
 
 class Card {
 public:
@@ -28,8 +28,7 @@ public:
      * @return
      *      A new instance of Card.
     */
-    Card(CardType type, const CardStats& stats);
-
+    Card(){};
 
     /*
      * Handling the player's applyEncounter with the card:
@@ -38,7 +37,7 @@ public:
      * @return
      *      void
     */
-    void applyEncounter(Player& player) const;
+    virtual void applyEncounter(Player& player) const = 0;
 
 
     /*
@@ -47,27 +46,31 @@ public:
      * @return
      *      void
     */
-    void printInfo() const;
+    //void printInfo() const;
 
 
     /*
      * C'tor to the "default card" - Treasure card that gives 0 coins
     */
-    Card(): m_effect(CardType::Treasure), m_stats() {}
+    //Card(): m_effect(CardType::Treasure) {}
 
 
     /*
      * Here we are explicitly telling the compiler to use the default methods
     */
     Card(const Card&) = default;
-    ~Card() = default;
+    virtual ~Card() = default;
     Card& operator=(const Card& other) = default;
 
-
+/*
 private:
-    CardType m_effect;
-    CardStats m_stats;
 
+    CardType m_effect;
+
+    int m_cost; // The cost of a "Buff/Heal" card
+    int m_heal; // The amount of HP you get when buying a "HEAL" card
+    int m_buff; // The amount of force you get when buying a "BUFF" card
+    */
 };
 
 

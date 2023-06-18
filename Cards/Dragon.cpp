@@ -3,3 +3,7 @@
 //
 
 #include "Dragon.h"
+void Dragon::defeatsPlayer(Player &player) const
+{
+    player.killPlayer();
+}

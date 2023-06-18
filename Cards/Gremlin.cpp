@@ -3,3 +3,7 @@
 //
 
 #include "Gremlin.h"
+void Gremlin::defeatsPlayer(Player &player) const
+{
+    player.damage(HP_TO_DEMINISH);
+}
