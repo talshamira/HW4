@@ -18,6 +18,9 @@ set(CMAKE_CPP_FLAGS ${MTM_FLAGS_DEBUG})
 
 
 # Add the names of your source files here
-set(CPP_FILES "Exception" "Players/Healer" "Mtmchkin" "Players/Ninja" "test" "utilities" "Players/Player")
+set(CPP_FILES "Exception" "Mtmchkin" "utilities" "test"
+        "Players/Player" "Players/Healer" "Players/Ninja" "Players/Warrior"
+        "Cards/Card" "Cards/BattleCard" "Cards/Gremlin" "Cards/Dragon" "Cards/Witch"
+        "Cards/Merchant" "Cards/Treasure" "Cards/Well" "Cards/Barfight" "Cards/Mana")
 
 add_executable(run ${CPP_FILES})

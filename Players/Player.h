@@ -57,10 +57,14 @@ public:
     bool pay(int coinsToPay);
 
     //Returns the attack strength. attack strength = force + level
-   virtual int getAttackStrength() const;
+    virtual int getAttackStrength() const;
 
-
+    std::string getName() const;
+    int getCoins() const;
+    void killPlayer();
+    void weakPlayer();
     virtual std::string getJob() const = 0;
+
 private:
     std::string m_name; 
 protected:

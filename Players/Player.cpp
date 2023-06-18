@@ -99,8 +99,22 @@ int Player::getAttackStrength() const {
     return (this->m_level + this->m_force);
 }
 
-void Player::updateName(std::string name)
+std::string Player::getName() const
 {
-    this->m_name.erase();
-    this->m_name.copy(name);
+    return this->m_name;
+}
+
+int Player::getCoins() const
+{
+    return this->m_coins;
+}
+
+void Player::killPlayer()
+{
+    this->m_HP = 0;
+}
+
+void Player::weakPlayer()
+{
+    this->m_force--;
 }
