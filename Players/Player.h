@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-#include "../utilities.h"
+
 
 
 class Player {
@@ -23,13 +23,14 @@ public:
     Player(std::string name);
 
     //default destractor, copy constractor and operator=.
-    ~Player() = default;
+    virtual ~Player() = default;
     Player(const Player&) = default;
     Player & operator=(const Player &) = default;
 
     //Prints players details: name, level, force, HP and coins.
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
-    
+    //update name for initialization
+    void updateName(std::string name);
     //Level up the players level.
     void levelUp();
 

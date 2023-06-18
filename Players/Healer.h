@@ -17,7 +17,7 @@ class Healer : public Player
          * heals the healer by twice the given amount
          * @param hpToAdd - amount of hp given
          */
-        void heal(int hpToAdd);
+        void heal(int hpToAdd) override;
 
 
          /*
@@ -25,7 +25,15 @@ class Healer : public Player
          * returns "Healer"
          * @return - returns the type of player (Ninja, Healer, Warrior)
          */
-        std::string getJob() const;
+        std::string getJob() const override;
+
+
+        /*
+         * default functions
+         */
+        ~Healer() = default;
+        Healer& operator=(const Healer& oldHealer) = default;
+        Healer(const Healer& oldHealer) = default;
 };
 
 #endif

@@ -17,14 +17,21 @@ class Ninja : public Player
          * Ninjas get twice as many coins meaning 2*coinsToAdd
          * @param coinsToAdd - amount to be added
          */
-        void addCoins(int coinsToAdd);
+        void addCoins(int coinsToAdd) override;
 
         /*
          * virtual get function derived from player
          * returns "Ninja"
          * @return - returns the type of player (Ninja, Healer, Warrior)
          */
-        std::string getJob() const;
+        std::string getJob() const override;
+
+        /*
+         * default functions
+         */
+        ~Ninja() = default;
+        Ninja& operator=(const Ninja& oldNinja) = default;
+        Ninja(const Ninja& oldNinja) = default;
 
 };
 #endif //NINJA_H_HW4

@@ -1,6 +1,20 @@
 #ifndef MTMCHKIN_H_
 #define MTMCHKIN_H_
 
+#include <string>
+#include <iostream>
+#include "Cards/Cards.h"
+#include "Players/Player.h"
+#include "Players/Healer.h"
+#include "Players/Ninja.h"
+#include "Players/Warrior.h"
+#include "utilities.h"
+#include <queue>
+#include <list>
+#include <map>
+#include <memory>
+#include <fstream>
+
 class Mtmchkin{
 
 public:
@@ -46,6 +60,14 @@ public:
     *          int - number of rounds played
     */
     int getNumberOfRounds() const;
+
+    private:
+        int m_numOfRounds;
+        std::queue<std::unique_ptr<Cards>> m_deck;
+        std::list<std::unique_ptr<Player>> m_players;
+        static const int MIN_SIZE_OF_DECK = 5;
+
+        int getTeamSize();
 };
 
 
