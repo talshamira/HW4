@@ -3,7 +3,7 @@
 //
 
 #include "Player.h"
-
+#include "../utilities.h"
 
 
 Player::Player(std::string name) :
@@ -97,4 +97,10 @@ bool Player::pay(int coinsToPay) {
 
 int Player::getAttackStrength() const {
     return (this->m_level + this->m_force);
+}
+
+void Player::updateName(std::string name)
+{
+    this->m_name.erase();
+    this->m_name.copy(name);
 }
