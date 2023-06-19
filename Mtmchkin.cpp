@@ -187,8 +187,20 @@ void getInputs(std::string name, std::string job)
 
 bool checkName(std::string name)
 {
-    return name.length() <= MAX_LENGTH_NAME && name.find(SPACER) == name.size();
+    if (name.length() > MAX_LENGTH_NAME)
+    {
+        return false;
+    }
+    for(char c : name)
+    {
+        if(!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z'))
+        {
+            return false;
+        }
+    }
+    return true;
 }
+
 bool checkJob(std::string job)
 {
     return job.compare("Ninja") || job.compare("Healer") || job.compare("Warrior"); 
