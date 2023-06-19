@@ -5,8 +5,15 @@
 #include "Mana.h"
 void Mana::applyEncounter(Player& player) const
 {
-    if(player.getJob() == "Healer")
+    bool isHealer = (player.getJob() == "Healer") ? true : false;
+    if(isHealer)
     {
         player.heal(POINTS_TO_ADD_TO_HEALER);
     }
+    printManaMessage(isHealer);
+}
+
+void Mana::printCard(std::ostream& os) const
+{
+    printCardDetails(os, "Mana");
 }

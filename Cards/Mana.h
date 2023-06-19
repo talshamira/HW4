@@ -14,6 +14,9 @@
 
 class Mana : public Card
 {
+private:
+    void printCard(std::ostream& os) const override;
+
 public:
     static const int POINTS_TO_ADD_TO_HEALER = 10;
     void applyEncounter(Player& player) const override;

@@ -19,7 +19,8 @@ public:
 private:
     int m_force;  // The force of the monster
     int m_loot; // The profit you get when winning a battle or when getting a "Treasure" card
-    //int m_hpLossOnDefeat; // The amount of hp you lose when losing the battle
+    virtual void printWin(Player &player) const = 0;
+    virtual void printLose(Player &player) const = 0;
 };
 
 

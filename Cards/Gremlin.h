@@ -14,10 +14,15 @@
 
 class Gremlin : public BattleCard
 {
+private:
     static const int FORCE = 5;
     static const int LOOT = 2;
     static const int HP_TO_DEMINISH = 10;
-    public:
+    void printCard(std::ostream& os) const override;
+    void printWin(Player &player) const override;
+    void printLose(Player &player) const override;
+
+public:
         Gremlin() : BattleCard(FORCE, LOOT) {}
         void defeatsPlayer(Player &player) const override;
 };

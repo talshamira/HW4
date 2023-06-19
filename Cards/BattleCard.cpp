@@ -15,9 +15,11 @@ void BattleCard::applyEncounter(Player &player) const
     {
         player.levelUp();
         player.addCoins(this->m_loot);
+        printWin(player);
     }
     else
     {
         defeatsPlayer(player);
+        printLose(player);
     }
 }

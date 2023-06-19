@@ -13,6 +13,8 @@
 
 class Barfight : public Card
 {
+private:
+    void printCard(std::ostream& os) const override;
 public:
     static const int POINTS_TO_DIMINISH = 8;
     void applyEncounter(Player& player) const override;

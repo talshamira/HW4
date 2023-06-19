@@ -5,8 +5,16 @@
 #include "Barfight.h"
 void Barfight::applyEncounter(Player& player) const
 {
-    if(player.getJob() != "Warrior")
+    bool isWarrior = (player.getJob() == "Warrior") ? true : false;
+    if(!isWarrior)
     {
         player.damage(POINTS_TO_DIMINISH);
     }
+
+    printBarfightMessage(isWarrior);
+}
+
+void Barfight::printCard(std::ostream& os) const
+{
+    printCardDetails(os, "Barfight");
 }

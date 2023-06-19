@@ -8,16 +8,18 @@
 #include "../Players/Player.h"
 #include "../utilities.h"
 #include <ostream>
-
+#include <string>
 
 class Merchant : public Card
 {
-public:
+private:
     static const int CHOICE_FOR_POTION = 1;
     static const int CHOICE_FOR_BOOST = 2;
     static const int COINS_FOR_POTION = 5;
     static const int COINS_FOR_BOOST = 10;
+    void printCard(std::ostream& os) const override;
 
+public:
     void applyEncounter(Player& player) const override;
 };
 

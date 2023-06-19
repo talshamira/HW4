@@ -17,6 +17,9 @@ class Well : public Card
 public:
     static const int POINTS_TO_DIMINISH = 10;
     void applyEncounter(Player& player) const override;
+
+private:
+    void printCard(std::ostream& os) const override;
 };
 
 #endif //HW4_WELL_H

@@ -14,7 +14,10 @@
 
 class Treasure : public Card
 {
+private:
+    void printCard(std::ostream& os) const override;
     static const int COINS_TO_ADD = 10;
+public:
     void applyEncounter(Player& player) const override;
 };
 

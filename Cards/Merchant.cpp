@@ -4,19 +4,21 @@
 
 #include "Merchant.h"
 
-//TODO: check about os and if need to use getline,stoi
 void Merchant::applyEncounter(Player& player) const
 {
-    int playersChoice;
+    int playersChoice, playersCoins = player.getCoins();
+    std::string input;
     printMerchantInitialMessageForInteractiveEncounter(std::cout, player.getName(), player.getCoins());
-    std::cin >> playersChoice;
+    std::getline (std::cin,input);
+    playersChoice = stoi(input);
     while (playersChoice != 0 && playersChoice != CHOICE_FOR_POTION && playersChoice != CHOICE_FOR_BOOST)
     {
         printInvalidInput();
-        std::cin >> playersChoice;
+        std::getline (std::cin,input);
+        playersChoice = stoi(input);
     }
-    int playersCoins = player.getCoins();
-    if((playersChoice == CHOICE_FOR_POTION && playersCoins < COINS_FOR_POTION) || (playersChoice == CHOICE_FOR_BOOST && playersCoins < COINS_FOR_BOOST))
+    if((playersChoice == CHOICE_FOR_POTION && playersCoins < COINS_FOR_POTION) ||
+        (playersChoice == CHOICE_FOR_BOOST && playersCoins < COINS_FOR_BOOST))
     {
         printMerchantInsufficientCoins(std::cout);
         printMerchantSummary(std::cout, player.getName(), playersChoice, 0);
@@ -34,4 +36,8 @@ void Merchant::applyEncounter(Player& player) const
             break;
     }
 }
-//printMerchantInitialMessageForInteractiveEncounter
+
+void Merchant::printCard(std::ostream& os) const
+{
+    printCardDetails(os, "Merchant");
+}
