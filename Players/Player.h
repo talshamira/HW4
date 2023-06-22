@@ -58,11 +58,21 @@ public:
     //Returns the attack strength. attack strength = force + level
     virtual int getAttackStrength() const;
 
+    //Returns the name of the player
     std::string getName() const;
+
+    //Returns the coins of the player
     int getCoins() const;
+
+    //reduce the hp of the player to 0
     void killPlayer();
+
+    //reduce the force of the player in 1 force
     void weakPlayer();
+
+    //returns the job of the player - Ninja Warrior or Healer
     virtual std::string getJob() const = 0;
+
 
 private:
     std::string m_name; 

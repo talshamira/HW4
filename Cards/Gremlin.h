@@ -21,7 +21,6 @@ private:
     void printCard(std::ostream& os) const override;
     void printWin(Player &player) const override;
     void printLose(Player &player) const override;
-
 public:
         Gremlin() : BattleCard(FORCE, LOOT) {}
         void defeatsPlayer(Player &player) const override;

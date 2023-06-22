@@ -30,9 +30,11 @@ void Merchant::applyEncounter(Player& player) const
             break;
         case CHOICE_FOR_POTION:
             printMerchantSummary(std::cout, player.getName(), playersChoice, COINS_FOR_POTION);
+            player.pay(COINS_FOR_POTION);
             break;
         case CHOICE_FOR_BOOST:
             printMerchantSummary(std::cout, player.getName(), playersChoice, COINS_FOR_BOOST);
+            player.pay(COINS_FOR_BOOST);
             break;
     }
 }
