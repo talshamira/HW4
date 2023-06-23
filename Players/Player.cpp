@@ -8,10 +8,10 @@
 
 Player::Player(std::string name) :
     m_name(name),
-    m_level(1),
-    m_force(DEFAULT_FORCE),
     m_HP(DEFAULT_MAX_HP),
-    m_coins(DEFAULT_COINS)
+    m_coins(DEFAULT_COINS),
+    m_level(1),
+    m_force(DEFAULT_FORCE)
 {}
 
 std::ostream& operator<<(std::ostream& os,const Player& player)

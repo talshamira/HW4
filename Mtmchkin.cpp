@@ -59,18 +59,16 @@ Mtmchkin::Mtmchkin(const std::string &filename)
             if(job.compare("Ninja"))
             {
                 tempPlayer.reset(new Ninja(name));
-                this->m_players.push_back(tempPlayer);
             }
             else if(job.compare("Healer"))
             {
                 tempPlayer.reset(new Healer(name));
-                this->m_players.push_back(tempPlayer);
             }
             else
             {
                 tempPlayer.reset(new Warrior(name));
-                this->m_players.push_back(tempPlayer);
             }
+            this->m_players.push_back(std::move(tempPlayer));
         }
         catch(...)
         {
@@ -95,13 +93,13 @@ void Mtmchkin::playRound()
             {
                 printTurnStartMessage(player->getName());
                 this->m_deck.front()->applyEncounter(*player);
-                this->m_deck.push_back(this->m_deck.front());
+                this->m_deck.push_back(std::move(m_deck.front()));
                 this->m_deck.pop_front();
-                if(player->getLevel() == player->MAX_LEVEL)
+                if((*player).getLevel() == player->MAX_LEVEL)
                 {
                     this->m_rankings[counter] = m_winnerPointer++;
                 }
-                else if(player->isKnockedOut())
+                else if((*player).isKnockedOut())
                 {
                     this->m_rankings[counter] = m_looserPointer--;
                 }
