@@ -15,35 +15,39 @@ int getTeamSize();
 
 Mtmchkin::Mtmchkin(const std::string &filename)
 {
-    std::string lineRead;
+    std::string lineRead,name, job;
     int counter = 0;
     std::map<std::string, std::unique_ptr<Card>(*)()> cardMap = getMapOfCards();
     this->m_teamLength = initGame();
+    std::ifstream deckFile;
     try {
-        std::ifstream deckFile(filename);
-        while(std::getline(deckFile, lineRead))
-        {
-            if(cardMap.find(lineRead) != cardMap.end())//TODO check if line numbers start at 0 or 1
-            {
-                counter++;
-                this->m_deck.push_back(std::move(cardMap[lineRead]()));
-            }
-            else
-            {
-                if(lineRead.empty() && counter == 0)
-                {
-                    throw(DeckFileInvalidSize());
-                }
-                else
-                {
-                    throw(DeckFileFormatError(counter));
-                }
-            }
-        }
+        deckFile.open(filename, std::ifstream::in);
     }
     catch (...) {
         throw(DeckFileNotFound());
     }
+
+    while(std::getline(deckFile, lineRead))
+    {
+        if(cardMap.find(lineRead) != cardMap.end())//TODO check if line numbers start at 0 or 1
+        {
+            counter++;
+            this->m_deck.push_back(std::move(cardMap[lineRead]()));
+        }
+        else
+        {
+            if(lineRead.empty() && counter == 0)
+            {
+                throw(DeckFileInvalidSize());
+            }
+            else
+            {
+                throw(DeckFileFormatError(counter));
+            }
+        }
+    }
+
+    deckFile.close();
 
     if(counter < MIN_SIZE_OF_DECK)
     {
@@ -52,7 +56,6 @@ Mtmchkin::Mtmchkin(const std::string &filename)
     
     for(int i = 0; i < this->m_teamLength; i++)
     {
-        std::string name, job;
         getInputs(name, job);
         try
         {
