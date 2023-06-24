@@ -26,7 +26,7 @@ Mtmchkin::Mtmchkin(const std::string &filename)
             if(cardMap.find(lineRead) != cardMap.end())//TODO check if line numbers start at 0 or 1
             {
                 counter++;
-                this->m_deck.push_front(std::move(cardMap[lineRead]()));
+                this->m_deck.push_back(std::move(cardMap[lineRead]()));
             }
             else
             {
