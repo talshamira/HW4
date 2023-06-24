@@ -6,78 +6,97 @@ static const int MAX_LENGTH_NAME = 15;
 static const std::string SPACER = " ";
 bool checkName(std::string name);
 bool checkJob(std::string job);
-void getInputs(std::string name, std::string job);
+void getInputs(std::string& name, std::string& job);
 std::map<std::string ,std::unique_ptr<Card>(*)()> getMapOfCards();
+std::unique_ptr<Player> initPlayer( const std::string& job,const  std::string& name);
 int getTeamSize();
 
 
 
 Mtmchkin::Mtmchkin(const std::string &filename)
 {
-    printStartGameMessage();
-    std::ifstream deckFile(filename);
-    if(!deckFile || deckFile.is_open())
-    {
-        throw(DeckFileNotFound());
-    }
     std::string lineRead;
     int counter = 0;
     std::map<std::string, std::unique_ptr<Card>(*)()> cardMap = getMapOfCards();
-    while(std::getline(deckFile, lineRead))
-    {
-        //TODO check if line numbers start at 0 or 1
-        if(cardMap.find(lineRead) != cardMap.end())
+    this->m_teamLength = initGame();
+    try {
+        std::ifstream deckFile(filename);
+        while(std::getline(deckFile, lineRead))
         {
-            counter++;
-            this->m_deck.push_front(std::move(cardMap[lineRead]()));
-        }
-        else
-        {
-            if(lineRead.empty() && counter == 0)
+            if(cardMap.find(lineRead) != cardMap.end())//TODO check if line numbers start at 0 or 1
             {
-                throw(DeckFileInvalidSize());
+                counter++;
+                this->m_deck.push_front(std::move(cardMap[lineRead]()));
             }
             else
             {
-                throw(DeckFileFormatError(counter));
+                if(lineRead.empty() && counter == 0)
+                {
+                    throw(DeckFileInvalidSize());
+                }
+                else
+                {
+                    throw(DeckFileFormatError(counter));
+                }
             }
         }
-
     }
+    catch (...) {
+        throw(DeckFileNotFound());
+    }
+
     if(counter < MIN_SIZE_OF_DECK)
     {
         throw(DeckFileInvalidSize());
     }
-    int teamsize = getTeamSize();
-    std::string name, job;
-    for(int i = 0; i < teamsize; i++)
+    
+    for(int i = 0; i < this->m_teamLength; i++)
     {
+        std::string name, job;
         getInputs(name, job);
         try
         {
-            std::unique_ptr<Player> tempPlayer;
-            if(job.compare("Ninja"))
-            {
-                tempPlayer.reset(new Ninja(name));
-            }
-            else if(job.compare("Healer"))
-            {
-                tempPlayer.reset(new Healer(name));
-            }
-            else
-            {
-                tempPlayer.reset(new Warrior(name));
-            }
-            this->m_players.push_back(std::move(tempPlayer));
+            this->m_players.push_back(std::move(initPlayer(job, name)));
         }
         catch(...)
         {
             throw(std::bad_alloc());// dont know what to throw
         }
+        this->m_rankings[i] = IN_GAME;
     }
+
+}
+
+int Mtmchkin::initGame()
+{
+    printStartGameMessage();
+
     this->m_numOfRounds = 0;
     this->m_winnerPointer = 1;
-    this->m_looserPointer = teamsize;
+
+    int teamSize = getTeamSize();
+    this->m_looserPointer = teamSize;
+
+    return teamSize;
+}
+
+std::unique_ptr<Player> initPlayer( const std::string& job,const  std::string& name)
+{
+    std::unique_ptr<Player> tempPlayer;
+    if(!job.compare("Ninja"))
+    {
+        tempPlayer.reset(new Ninja(name));
+    }
+    else if(!job.compare("Healer"))
+    {
+        tempPlayer.reset(new Healer(name));
+    }
+    else
+    {
+        tempPlayer.reset(new Warrior(name));
+    }
+
+    return tempPlayer;
 }
 
 void Mtmchkin::playRound()
@@ -130,30 +149,52 @@ bool Mtmchkin::isGameOver() const
 void Mtmchkin::printLeaderBoard() const
 {
     printLeaderBoardStartMessage();
-    int teamLength = this->m_looserPointer + this->m_winnerPointer;
     int searchFor = 1;
-    while(searchFor != teamLength)
+    bool stillInPlay = false;
+    bool found[m_teamLength];
+    for(int i = 0; i < m_teamLength; i++)
+    {
+        found[i] = false;
+    }
+    while(searchFor <= this->m_teamLength && !stillInPlay)
     {
         int counter = 0;
-        while(counter < teamLength && this->m_rankings[counter] != searchFor)
+        while(counter < this->m_teamLength && this->m_rankings[counter] != searchFor)
         {
             counter++;
         }
-        printPlayerLeaderBoard(this->m_rankings[counter], *this->m_players[counter]);
-        searchFor++;
+        if(counter < this->m_teamLength && !found[counter])
+        {
+            printPlayerLeaderBoard(m_rankings[counter], *(m_players[counter]));
+            searchFor++;
+            found[counter] = true;
+        }
+        else
+        {
+            stillInPlay = true;
+        }
     }
+    for(int i = 0; i < m_teamLength; i++)
+    {
+        if(!found[i])
+        {
+            printPlayerLeaderBoard(searchFor, *(m_players[i]));
+            searchFor++;
+        }
+    }
+
 }
  int Mtmchkin::getNumberOfRounds() const
  {
     return this->m_numOfRounds;
  }
 
-void getInputs(std::string name, std::string job)
+void getInputs(std::string& name, std::string& job)
 {
     printInsertPlayerMessage();
     std::string input;
     bool needToPrintName = false, needToPrintJob = false;
-    while(checkName(name) || checkJob(job))
+    while(!checkName(name) || !checkJob(job))
     {
         if(needToPrintName && checkName(name))
         {
@@ -185,7 +226,7 @@ void getInputs(std::string name, std::string job)
 
 bool checkName(std::string name)
 {
-    if (name.length() > MAX_LENGTH_NAME)
+    if (name.length() > MAX_LENGTH_NAME || name.empty())
     {
         return false;
     }

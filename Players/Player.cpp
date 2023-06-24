@@ -116,5 +116,12 @@ void Player::killPlayer()
 
 void Player::weakPlayer()
 {
-    this->m_force--;
+    if(this->m_force > 0)
+    {
+        this->m_force--;
+    }
+    else
+    {
+        this->m_force = 0;
+    }
 }

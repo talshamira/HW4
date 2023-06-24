@@ -1,7 +1,4 @@
-#ifndef MTMCHKIN_H_
-#define MTMCHKIN_H_
 
-#define MAX_TEAM_SIZE 6
 #include <string>
 #include <iostream>
 #include "Cards/Card.h"
@@ -25,11 +22,13 @@
 #include <fstream>
 #include <queue>
 
+#define MAX_TEAM_SIZE 6
+
 
 class Mtmchkin{
 
 public:
-    
+
     /*
     * C'tor of Mtmchkin class
     *
@@ -38,7 +37,7 @@ public:
     *      A new instance of Mtmchkin.
     */
     explicit Mtmchkin(const std::string &fileName);
-    
+
     /*
     * Play the next Round of the game - according to the instruction in the exercise document.
     *
@@ -46,7 +45,7 @@ public:
     *      void
     */
     void playRound();
-    
+
     /*
     * Prints the leaderBoard of the game at a given stage of the game - according to the instruction in the exercise document.
     *
@@ -54,7 +53,7 @@ public:
     *      void
     */
     void printLeaderBoard() const;
-    
+
     /*
     *  Checks if the game ended:
     *
@@ -63,7 +62,7 @@ public:
     *          False otherwise
     */
     bool isGameOver() const;
-    
+
 	/*
     *  Returns the number of rounds played.
     *
@@ -72,16 +71,17 @@ public:
     */
     int getNumberOfRounds() const;
 
+    
+
     private:
+        int initGame();
         int m_numOfRounds;
         std::deque<std::unique_ptr<Card>> m_deck;
         std::vector<std::unique_ptr<Player>> m_players;
         static const int MIN_SIZE_OF_DECK = 5;
-        int m_rankings [MAX_TEAM_SIZE] = {-1};
+        static const int IN_GAME = -1;
+        int m_rankings [MAX_TEAM_SIZE];
         int m_winnerPointer;
         int m_looserPointer;
+        int m_teamLength;
 };
-
-
-
-#endif /* MTMCHKIN_H_ */
