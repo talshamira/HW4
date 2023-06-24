@@ -1,3 +1,0 @@
-C:/Users/user/Documents/סמסטר 5 אביב 2023/מתמ/HW/HW4/cmake-build-debug/CMakeFiles/run.dir
-C:/Users/user/Documents/סמסטר 5 אביב 2023/מתמ/HW/HW4/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/user/Documents/סמסטר 5 אביב 2023/מתמ/HW/HW4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
