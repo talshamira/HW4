@@ -4,7 +4,8 @@
 int main()
 {
     const int MAX_NUM_OF_ROUNDS = 100;
-    try {
+    try 
+    {
         Mtmchkin theGame("deck.txt");
         while(!theGame.isGameOver() && theGame.getNumberOfRounds() < MAX_NUM_OF_ROUNDS)
         {

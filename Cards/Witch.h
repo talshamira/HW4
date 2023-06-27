@@ -16,7 +16,7 @@
 class Witch : public BattleCard
 {
 private:
-    static const int FORCE = 10;
+    static const int FORCE = 11;
     static const int LOOT = 2;
     static const int HP_TO_DEMINISH = 10;
     void printCard(std::ostream& os) const override;
