@@ -17,6 +17,8 @@ private:
     static const int CHOICE_FOR_BOOST = 2;
     static const int COINS_FOR_POTION = 5;
     static const int COINS_FOR_BOOST = 10;
+    static const int BUFF_ADDED = 1;
+    static const int HP_TO_ADD = 1;
     void printCard(std::ostream& os) const override;
 
 public:

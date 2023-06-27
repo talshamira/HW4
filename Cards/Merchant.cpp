@@ -6,17 +6,29 @@
 
 void Merchant::applyEncounter(Player& player) const
 {
-    int playersChoice, playersCoins = player.getCoins();
+    int playersChoice = -1, playersCoins = player.getCoins();
     std::string input;
     printMerchantInitialMessageForInteractiveEncounter(std::cout, player.getName(), player.getCoins());
-    std::getline (std::cin,input);
-    playersChoice = stoi(input);
-    while (playersChoice != 0 && playersChoice != CHOICE_FOR_POTION && playersChoice != CHOICE_FOR_BOOST)
+    
+    bool valid = false;
+    while(!valid) 
     {
-        printInvalidInput();
         std::getline (std::cin,input);
-        playersChoice = stoi(input);
-    }
+        try
+        {
+            playersChoice = stoi(input);
+        }
+        catch(...)
+        {}
+        if(playersChoice == 0 || playersChoice == CHOICE_FOR_POTION || playersChoice == CHOICE_FOR_BOOST)
+        {
+            valid = true;
+        }
+        else
+        {
+           printInvalidInput(); 
+        }
+    } 
     if((playersChoice == CHOICE_FOR_POTION && playersCoins < COINS_FOR_POTION) ||
         (playersChoice == CHOICE_FOR_BOOST && playersCoins < COINS_FOR_BOOST))
     {
@@ -31,10 +43,12 @@ void Merchant::applyEncounter(Player& player) const
         case CHOICE_FOR_POTION:
             printMerchantSummary(std::cout, player.getName(), playersChoice, COINS_FOR_POTION);
             player.pay(COINS_FOR_POTION);
+            player.heal(HP_TO_ADD);
             break;
         case CHOICE_FOR_BOOST:
             printMerchantSummary(std::cout, player.getName(), playersChoice, COINS_FOR_BOOST);
             player.pay(COINS_FOR_BOOST);
+            player.buff(BUFF_ADDED);
             break;
     }
 }

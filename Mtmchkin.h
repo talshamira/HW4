@@ -84,4 +84,6 @@ public:
         int m_winnerPointer;
         int m_looserPointer;
         int m_teamLength;
+        int m_numOfWinners;
+        int m_numOfLoosers;
 };

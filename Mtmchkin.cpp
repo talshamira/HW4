@@ -20,29 +20,35 @@ Mtmchkin::Mtmchkin(const std::string &filename)
     std::map<std::string, std::unique_ptr<Card>(*)()> cardMap = getMapOfCards();
     this->m_teamLength = initGame();
     std::ifstream deckFile(filename);
+    bool isEmpty = true;
     if(!deckFile)
     {
         throw(DeckFileNotFound());
     }
-        while(std::getline(deckFile, lineRead))
+    while(std::getline(deckFile, lineRead))
+    {
+        isEmpty = false;
+        if(cardMap.find(lineRead) != cardMap.end())
         {
-            if(cardMap.find(lineRead) != cardMap.end())
+            counter++;
+            this->m_deck.push_back(std::move(cardMap[lineRead]()));
+        }
+        else
+        {
+            if(lineRead.empty() && counter == 1)
             {
-                counter++;
-                this->m_deck.push_back(std::move(cardMap[lineRead]()));
+                throw(DeckFileInvalidSize());
             }
             else
             {
-                if(lineRead.empty() && counter == 1)
-                {
-                    throw(DeckFileInvalidSize());
-                }
-                else
-                {
-                    throw(DeckFileFormatError(counter));
-                }
+                throw(DeckFileFormatError(counter));
             }
         }
+    }
+    if(isEmpty)
+    {
+        throw(DeckFileInvalidSize());
+    }
     if(counter < MIN_SIZE_OF_DECK)
     {
         throw(DeckFileInvalidSize());
@@ -63,7 +69,8 @@ int Mtmchkin::initGame()
 
     this->m_numOfRounds = 0;
     this->m_winnerPointer = 1;
-
+    this->m_numOfWinners = 0;
+    this->m_numOfLoosers = 0;
     int teamSize = getTeamSize();
     this->m_looserPointer = teamSize;
 
@@ -107,10 +114,12 @@ void Mtmchkin::playRound()
                 if((*player).getLevel() == player->MAX_LEVEL)
                 {
                     this->m_rankings[counter] = m_winnerPointer++;
+                    this->m_numOfWinners++;
                 }
                 else if((*player).isKnockedOut())
                 {
                     this->m_rankings[counter] = m_looserPointer--;
+                    this->m_numOfLoosers++;
                 }
             }
             counter++;
@@ -124,15 +133,7 @@ void Mtmchkin::playRound()
 
 bool Mtmchkin::isGameOver() const
 {
-    int teamLength =  this->m_winnerPointer+ this->m_looserPointer;
-    for(int i = 0; i < teamLength; i++)
-    {
-        if(this->m_rankings[i] == -1)
-        {
-            return false;
-        }
-    }
-    return true;
+    return m_numOfLoosers+m_numOfWinners == m_teamLength;
 }
 
 
@@ -195,7 +196,7 @@ void getInputs(std::string& name, std::string& job)
         {
             printInvalidName();
         }
-        if(needToPrintJob && !checkJob(job))
+        else if(needToPrintJob && !checkJob(job))
         {
             printInvalidClass();
         }
@@ -258,8 +259,6 @@ int getTeamSize()
         }
         catch(...)
         {
-            printInvalidTeamSize();
-            printEnterTeamSizeMessage();
             needPrint = false;
         }
         needPrint = true;
