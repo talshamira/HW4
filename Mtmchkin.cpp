@@ -26,7 +26,7 @@ Mtmchkin::Mtmchkin(const std::string &filename)
     }
         while(std::getline(deckFile, lineRead))
         {
-            if(cardMap.find(lineRead) != cardMap.end())//TODO check if line numbers start at 0 or 1
+            if(cardMap.find(lineRead) != cardMap.end())
             {
                 counter++;
                 this->m_deck.push_back(std::move(cardMap[lineRead]()));
@@ -140,38 +140,43 @@ void Mtmchkin::printLeaderBoard() const
 {
     printLeaderBoardStartMessage();
     int searchFor = 1;
-    bool stillInPlay = false;
-    bool found[m_teamLength];
-    for(int i = 0; i < m_teamLength; i++)
+    bool flag = true;
+    while (searchFor <= this->m_teamLength && flag)
     {
-        found[i] = false;
-    }
-    while(searchFor <= this->m_teamLength && !stillInPlay)
-    {
-        int counter = 0;
-        while(counter < this->m_teamLength && this->m_rankings[counter] != searchFor)
+        flag = false;
+        for(int i = 0; i < this-> m_teamLength; i++)
         {
-            counter++;
-        }
-        if(counter < this->m_teamLength && !found[counter])
-        {
-            printPlayerLeaderBoard(m_rankings[counter], *(m_players[counter]));
-            searchFor++;
-            found[counter] = true;
-        }
-        else
-        {
-            stillInPlay = true;
+            if(this->m_rankings[i] == searchFor)
+            {
+                printPlayerLeaderBoard(searchFor, *(m_players[i]));
+                searchFor++;
+                flag = true;
+                continue;
+            }
         }
     }
-    for(int i = 0; i < m_teamLength; i++)
+    for(int i = 0; i < this->m_teamLength; i++)
     {
-        if(!found[i])
+        if(this->m_rankings[i] == this->IN_GAME)
         {
             printPlayerLeaderBoard(searchFor, *(m_players[i]));
             searchFor++;
         }
     }
+    while (searchFor <= this->m_teamLength)
+    {
+        for(int i = 0; i < this-> m_teamLength; i++)
+        {
+            if(this->m_rankings[i] == searchFor)
+            {
+                printPlayerLeaderBoard(searchFor, *(m_players[i]));
+                searchFor++;
+                continue;
+            }
+        }
+    }
+
+    
 
 }
  int Mtmchkin::getNumberOfRounds() const
