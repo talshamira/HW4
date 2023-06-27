@@ -15,40 +15,34 @@ int getTeamSize();
 
 Mtmchkin::Mtmchkin(const std::string &filename)
 {
-    std::string lineRead,name, job;
-    int counter = 0;
+    std::string lineRead;
+    int counter = 1;
     std::map<std::string, std::unique_ptr<Card>(*)()> cardMap = getMapOfCards();
     this->m_teamLength = initGame();
-    std::ifstream deckFile;
-    try {
-        deckFile.open(filename, std::ifstream::in);
-    }
-    catch (...) {
+    std::ifstream deckFile(filename);
+    if(!deckFile)
+    {
         throw(DeckFileNotFound());
     }
-
-    while(std::getline(deckFile, lineRead))
-    {
-        if(cardMap.find(lineRead) != cardMap.end())//TODO check if line numbers start at 0 or 1
+        while(std::getline(deckFile, lineRead))
         {
-            counter++;
-            this->m_deck.push_back(std::move(cardMap[lineRead]()));
-        }
-        else
-        {
-            if(lineRead.empty() && counter == 0)
+            if(cardMap.find(lineRead) != cardMap.end())//TODO check if line numbers start at 0 or 1
             {
-                throw(DeckFileInvalidSize());
+                counter++;
+                this->m_deck.push_back(std::move(cardMap[lineRead]()));
             }
             else
             {
-                throw(DeckFileFormatError(counter));
+                if(lineRead.empty() && counter == 1)
+                {
+                    throw(DeckFileInvalidSize());
+                }
+                else
+                {
+                    throw(DeckFileFormatError(counter));
+                }
             }
         }
-    }
-
-    deckFile.close();
-
     if(counter < MIN_SIZE_OF_DECK)
     {
         throw(DeckFileInvalidSize());
@@ -56,18 +50,11 @@ Mtmchkin::Mtmchkin(const std::string &filename)
     
     for(int i = 0; i < this->m_teamLength; i++)
     {
+        std::string name, job;
         getInputs(name, job);
-        try
-        {
-            this->m_players.push_back(std::move(initPlayer(job, name)));
-        }
-        catch(...)
-        {
-            throw(std::bad_alloc());// dont know what to throw
-        }
+        this->m_players.push_back(std::move(initPlayer(job, name)));
         this->m_rankings[i] = IN_GAME;
     }
-
 }
 
 int Mtmchkin::initGame()
@@ -199,15 +186,13 @@ void getInputs(std::string& name, std::string& job)
     bool needToPrintName = false, needToPrintJob = false;
     while(!checkName(name) || !checkJob(job))
     {
-        if(needToPrintName && checkName(name))
+        if(needToPrintName && !checkName(name))
         {
             printInvalidName();
-            printInsertPlayerMessage();
         }
-        if(needToPrintJob && checkJob(job))
+        if(needToPrintJob && !checkJob(job))
         {
             printInvalidClass();
-            printInsertPlayerMessage();
         }
         try
         {
@@ -245,7 +230,7 @@ bool checkName(std::string name)
 
 bool checkJob(std::string job)
 {
-    return job.compare("Ninja") || job.compare("Healer") || job.compare("Warrior"); 
+    return job == "Ninja" || job == "Healer" || job == "Warrior"; 
 }
 
 int getTeamSize()

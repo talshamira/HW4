@@ -16,7 +16,7 @@ class DeckFileFormatError : public std::exception
 {
     public:
         DeckFileFormatError(const int line) : 
-        m_message("Deck File Error: File format error in line")
+        m_message("Deck File Error: File format error in line ")
         {
             this->m_message += std::to_string(line);
         }
