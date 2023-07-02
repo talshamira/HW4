@@ -74,6 +74,9 @@ public:
     
 
     private:
+        /*
+         * function that initiates the games default stats
+         */
         int initGame();
         int m_numOfRounds;
         std::deque<std::unique_ptr<Card>> m_deck;

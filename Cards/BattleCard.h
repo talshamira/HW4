@@ -14,8 +14,12 @@
 class BattleCard : public Card {
 public:
     BattleCard(int force, int loot);
+    /*
+     * default functions
+     */
     virtual ~BattleCard() = default;
-
+    BattleCard& operator=(const BattleCard& battleCard) = default;
+    BattleCard(const BattleCard& battleCard) = default;
     //if player is defeated in battle - acts according the kind of the card (Witch Dragon or Gremlin)
     virtual void defeatsPlayer(Player& player) const = 0;
 
